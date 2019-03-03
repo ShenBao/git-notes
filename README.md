@@ -16,9 +16,8 @@
 
 ## 笔记
 
-
--[Git常用命令集合](./command.md)
--[Git 笔记](./notes.md)
+- [Git常用命令集合](./command.md)
+- [Git 笔记](./notes.md)
 
 
 

@@ -364,8 +364,28 @@ rm fileName
 git rm fileName
 ```
 
+## 开发中临时加塞了紧急任务怎么处理？
+
+```
+git stash
+
+git stash list
+
+git stash apply     # 弹出内容，stash堆栈内容还存在
+
+git stash pop     # 弹出内容，stash堆栈当前的不保存
+```
 
 
+## 如何指定不需要Git管理的文件？
+
+.gitignore
+```
+*.d
+./dist
+```
+
+## 如何将Git仓库备份到本地？
 
 
 常⽤用的传输协议
@@ -381,4 +401,9 @@ git rm fileName
 备份特点
 
 ![备份特点](./images/img5.png)
+
+
+
+
+
 
