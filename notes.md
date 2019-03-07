@@ -402,6 +402,220 @@ git stash pop     # 弹出内容，stash堆栈当前的不保存
 
 ![备份特点](./images/img5.png)
 
+```
+git remote -v
+git remote add xxx xxx
+```
+
+## 注册一个GitHub账号
+
+https://github.com
+
+https://guides.github.com/
+
+https://help.github.com/
+
+
+## 配置公私钥
+
+```
+# 检查是否已经有ssh
+ls -al ~/.ssh
+
+ssh-keygen -t rsa 4096 -C 'email@email.com'
+
+cat id_rsa.pub
+
+```
+
+在这个位置配置：
+https://github.com/settings/keys
+
+
+## 在GitHub上创建个人仓库
+
+https://github.com/new
+
+注意： 关于.gitignone、license 的选择
+
+
+## 把本地仓库同步到GitHub
+
+```
+git remote add github git@github.com:xxx/xxx.git
+
+git remote -v
+
+git push github --all
+
+gitk --all
+
+git fetch github master
+
+git branch -v
+
+git branch -va
+
+git checkout master
+
+# 俩个毫无关系的分支合并
+git merge --allow-unrelated-histories github/amster
+
+```
+
+## 不同人修改了不同文件如何处理？
+
+```
+# 默认创建 xxx文件夹
+git clone git@github.com:xxx/xxx.git
+
+# 创建 xxx_002
+git clone git@github.com:xxx/xxx.git xxx_002
+
+
+# =================== A 操作 ===================
+
+cd xxx_002
+
+git config --add --local user.name 'get_test'
+
+git config --local --list
+
+git config --add --local user.email 'get_test'
+
+vi .git /config
+
+git checkout -b feature/add_git_commands origin/feature/add_git_commands
+
+vi readme.md
+
+git add -u
+
+git status
+
+git commit -m 'add git commit description in readme'
+
+git push
+
+
+# =================== B 操作 ===================
+
+cd xxx
+
+git fetch github
+
+git branch -av
+
+git checkout -b feature/add_git_commands origin/feature/add_git_commands
+
+vi index.html
+
+git add -u
+
+git commit -m 'add git commit description in index.html'
+
+# 暂时不 push
+
+
+# =================== A 操作 ===================
+
+vi readme.md
+
+git add -am 'fix readme'
+
+git push
+
+# =================== B 操作 ===================
+
+git push    # 这里 push 失败
+
+git fetch github
+
+git merge github/feature/add_git_commands
+
+git push
+
+```
+
+
+## 不同人修改了同文件的不同区域如何处理？
+
+自动合并
+
+注意检查文件，根据实际来操作
+
+
+## 不同人修改了同文件的同一区域如何处理？
+
+
+自动合并
+
+手动解决冲突
+
+```
+git commit -m 'msg'
+
+git merge --abort
+```
+
+
+## 同时变更了文件名和文件内容如何处理？
+
+```
+A. 变更文件名
+B. 变更文件内容
+
+git 会自动智能的处理
+```
+
+
+## 把同一文件改成了不同的文件名如何处理？
+
+```
+A. 变更文件名
+B. 变更文件名
+
+需要手动解决
+
+git rm <file.file>
+git add <file.file>
+```
+
+## 禁止向集成分支执行push -f操作
+
+-f ,--force
+
+```
+git reset --hard commit_id
+git push -f
+```
+
+`注：会丢失历史，谨慎操作`
+
+
+## 禁止向集成分支执行变更历史的操作
+
+`禁止向集成分支执行变更历史的操作, 在现有基础进行改造`
+
+
+## GitHub为什么会火？
+
+![git-1.png](./images/git-1.png)
+
+![git-2.png](./images/git-2.png)
+
+![git-3.png](./images/git-3.png)
+
+![git-4.png](./images/git-4.png)
+
+
+## GitHub都有哪些核心功能？
+
+https://github.com/features
+
+
+
+
 
 
 
