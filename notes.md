@@ -613,11 +613,110 @@ git push -f
 
 https://github.com/features
 
+https://github.com/marketplace
+
+
+## 怎么快速淘到感兴趣的开源项目
+
+git 最好 学习 资料
+
+git 最好 学习 资料 in:readme
+
+git 最好 学习 资料 in:readme stars：>1000
+
+
+`巧用高级搜索`
+
+
+## 怎样在GitHub上搭建个人博客
+
+jekyll
 
 
 
+## 开源项目怎么保证代码质量？
+
+Pull requests
+
+Ci
+
+如：reaction
+
+## 为何需要组织类型的仓库？
+
+https://github.com/settings/organizations
+
+Rep、PeoPle、Team、...
+
+
+## 创建团队的项目
+
+- Name
+- Descriptions
+- Public、Private
+- README
+- .gitignore
+- License
+
+- 配置权限
+
+
+## 怎样选择适合自己团队的工作流？
+
+需要考虑的因素
+- 团队人员的组成
+- 研发设计能力
+- 输出产品的特征
+- 项目难以程度
+
+![git6.png](./images/git6.png)
+
+![git7.png](./images/git7.png)
+
+![git8.png](./images/git8.png)
+
+![git9.png](./images/git9.png)
+
+![git10.png](./images/git10.png)
+
+![git11.png](./images/git11.png)
 
 
 
+## 如何挑选合适的分支集成策略？
+
+- 具体仓库  > Insights
+
+- 具体仓库  > settings
+    - Merge button
+
+```
+1. Allow merge commits  
+Add all commits from the head branch to the base branch with a merge commit.
+
+2. Allow squash merging  
+Combine all commits from the head branch into a single commit in the base branch.
+
+3. Allow rebase merging  
+Add all commits from the head branch onto the base branch individually.
+```
+
+## 启用issue跟踪需求和任务
+
+注意分类
 
 
+## 如何用project管理issue？
+
+看板
+
+https://github.com/ShenBao?tab=projects
+
+https://github.com/ShenBao/git-notes/projects
+
+
+## 项目内部怎么实施code review？
+
+https://github.com/ShenBao/git-notes/settings/branches
+
+pr 需要 rv 之后才可以合并
