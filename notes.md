@@ -74,6 +74,12 @@ git config --unset --system user.name
 
 优先级： local > global > system
 
+```
+local：区域为本仓库
+global: 当前用户的所有仓库
+system: 本系统的所有用户
+```
+
 
 ### 实践
 
@@ -134,6 +140,42 @@ git reset --hard
 git mv readme readme.md
 ```
 
+git add . 和 git add -u区别
+```
+git add . ：将工作空间新增和被修改的文件添加的暂存区
+git add -u :将工作空间被修改和被删除的文件添加到暂存区(不包含没有纳入Git管理的新增文件)
+```
+
+
+额外： git add -u 可以添加所有已经被 git 控制的文件到暂存区 以前删除文件夹只会用 「-rf」，get到了 「-r」，并得知它们两个区别：「-r」 有时候会提示是否确认删除。
+
+
+
+Tag标签: 显示已有标签
+```
+git tag
+```
+
+新建标签: 创建一个含附注类型的标签非常简单，用 -a （译注：取 annotated 的首字母）指定标签名字即可
+```
+git tag -a tag_name -m 'Some Messages'
+```
+
+删除本地标签:
+```
+git tag -d tag_name
+```
+
+删除remote标签 :
+```
+git push --delete origin tag_name
+```
+
+推送标签到github 将本地所有标签推送到remote:
+```
+git push origin --tags
+```
+
 
 ## 通过git log 查看版本演变历史
 
@@ -147,11 +189,15 @@ git branch -v
 git checkout -b temp 455jjk
 git commit -am 'commit msg'
 
-git log --all
-git log --all --graph
-git log --all --oneline
-git log --all --oneline -n4
-git log --all --oneline -n4 --graph
+git log --all                       # 查看所有分支的历史
+git log --graph                     # 查看图形化的 log 地址
+git log --oneline                   # 查看单行的简洁历史
+git log --oneline -n4               # 查看最近的4条简洁历史
+git log --oneline --all -n4 --graph 查看所有分支最近4条单行的图形化历史。
+```
+
+```
+git branch -v   # 查看本地有多少分支
 ```
 
 ## gitk：通过图形界面工具来查看版本历史
@@ -179,8 +225,53 @@ git branch -av
 
 ```
 ls -al
+```
 
 ```
+查看.git文件夹下的内容：
+
+ls .git/ -al
+```
+
+如下:
+```
+total 22
+drwxr-xr-x 1 ShenBao 197121    0 3月   9 22:54 ./
+drwxr-xr-x 1 ShenBao 197121    0 3月   2 22:27 ../
+-rw-r--r-- 1 ShenBao 197121   18 3月   9 22:54 COMMIT_EDITMSG
+-rw-r--r-- 1 ShenBao 197121  299 3月   2 22:26 config
+-rw-r--r-- 1 ShenBao 197121   73 3月   2 22:26 description
+-rw-r--r-- 1 ShenBao 197121  175 3月   4 21:37 gitk.cache
+-rw-r--r-- 1 ShenBao 197121   23 3月   2 22:26 HEAD
+drwxr-xr-x 1 ShenBao 197121    0 3月   2 22:26 hooks/
+-rw-r--r-- 1 ShenBao 197121 1602 3月   9 22:54 index
+drwxr-xr-x 1 ShenBao 197121    0 3月   2 22:26 info/
+drwxr-xr-x 1 ShenBao 197121    0 3月   2 22:26 logs/
+drwxr-xr-x 1 ShenBao 197121    0 3月   9 22:54 objects/
+-rw-r--r-- 1 ShenBao 197121  114 3月   2 22:26 packed-refs
+drwxr-xr-x 1 ShenBao 197121    0 3月   2 22:26 refs/
+```
+
+```
+cat命令主要用来查看文件内容，创建文件，文件合并，追加文件内容等功能。
+cat HEAD 查看HEAD文件的内容
+git cat-file 命令 显示版本库对象的内容、类型及大小信息。
+git cat-file -t b44dd71d62a5a8ed3 显示版本库对象的类型
+git cat-file -s b44dd71d62a5a8ed3 显示版本库对象的大小
+git cat-file -p b44dd71d62a5a8ed3 显示版本库对象的内容
+```
+
+.git里几个常用的如下：
+```
+HEAD：指向当前的工作路径
+config：存放本地仓库（local）相关的配置信息。
+refs/heads: 存放分支
+refs/heads/master/: 指向master分支最后一次commit
+refs/tags: 存放tag，又叫里程牌 （当这次commit是具有里程碑意义的 比如项目1.0的时候 就可以打tag）
+objects：核心文件，存储文件
+```
+
+.git/objects/ 存放所有的 git 对象，对象哈希值前 2 位作为文件夹名称，后 38 位作为对象文件名, 可通过 git cat-file -p 命令，拼接文件夹名称+文件名查看。
 
 
 ## commit、tree和blob三个对象之间的关系
@@ -192,6 +283,15 @@ ls -al
 git cat-file -p xxx-id      # 可以一直往下去查询 
 ```
 
+```
+commit: 提交时的镜像
+tree: 文件夹
+blob: 文件
+```
+
+【问题】 每次commit，git 都会将当前项目的所有文件夹及文件快照保存到objects目录，如果项目文件比较大，不断迭代，commit无数次后，objects目录中文件大小是不是会变得无限大？
+
+【解答】 Git对于内容相同的文件只会存一个blob，不同的commit的区别是commit、tree和有差异的blob，多数未变更的文件对应的blob都是相同的，这么设计对于版本管理系统来说可以省很多存储空间。其次，Git还有增量存储的机制，我估计是对于差异很小的blob设计的吧。
 
 ## 小练习：数一数tree的个数
 
@@ -211,6 +311,8 @@ git cat-file -p xxx-id
 
 
 ## 分离头指针情况下的注意事项
+
+detached HEAD
 
 ```
 git checkout commit-id
@@ -254,16 +356,21 @@ git diff HEAD HEAD~2
 ## 怎么删除不需要的分支？
 
 ```
+查看分支：
+git branch -av
+```
+
+```
 git branch -d branch-name
 
-git branch -D branch-name       # 确认无误之后再执行
+git branch -D branch-name       # 强制删除、确认无误之后再执行
 ```
 
 
 ## 怎么修改最新commit的message
 
 ```
-git commit -amend
+git commit -amend       # 对最近一次的commit信息进行修改
 ```
 
 
@@ -309,6 +416,9 @@ git log --graph
 
 ```
 git diff --cached
+
+git diff --staged
+
 ```
 
 
@@ -327,6 +437,12 @@ git reset HEAD fileName
 git diff --cached       # 对比一下
 ```
 
+```
+git reset 有三个参数
+--soft 这个只是把 HEAD 指向的 commit 恢复到你指定的 commit，暂存区 工作区不变
+--hard 这个是 把 HEAD， 暂存区， 工作区 都修改为 你指定的 commit 的时候的文件状态
+--mixed 这个是不加时候的默认参数，把 HEAD，暂存区 修改为 你指定的 commit 的时候的文件状态，工作区保持不变
+```
 
 ## 如何让工作区的文件恢复为和暂存区一样？
 
@@ -334,11 +450,14 @@ git diff --cached       # 对比一下
 git checkout -- <file>
 ```
 
+恢复工作区用checkout，恢复暂存区用reset。
+
+
 
 ## 怎样取消暂存区部分文件的更改？
 
 ```
-git resst HEAD -- <file>
+git reset HEAD -- <file>
 ```
 
 ## 消除最近的几次提交
@@ -361,19 +480,19 @@ git diff commit-id commit-id -- <file>
 ```
 rm fileName
 
-git rm fileName
+git rm <file>
 ```
 
 ## 开发中临时加塞了紧急任务怎么处理？
 
 ```
-git stash
+git stash list #查看stash中存放的信息
 
-git stash list
+git stash #将当前工作区内容存放到"堆栈"中
 
-git stash apply     # 弹出内容，stash堆栈内容还存在
+git stash apply #把"堆栈"里面的内容弹出到工作区中，同时"堆栈"中信息还在
 
-git stash pop     # 弹出内容，stash堆栈当前的不保存
+git stash pop #把"堆栈"里面的内容弹出到工作区中，同时丢弃"堆栈"中最新的信息
 ```
 
 
@@ -383,6 +502,22 @@ git stash pop     # 弹出内容，stash堆栈当前的不保存
 ```
 *.d
 ./dist
+```
+
+【提问】 如果提交commit后，想再忽略一些已经提交的文件，怎么处理。
+
+【回答】 The problem is that .gitignore ignores just files that weren't tracked before (by git add). Run git reset name_of_file to unstage the file and keep it. In case you want to also remove given file from the repository (after pushing), use git rm --cached name_of_file.
+
+把想忽略的文件添加到 .gitignore ；然后通过 git rm -- cached name_of_file 的方式删除掉git仓库里面无需跟踪的文件。
+
+
+### git修改gitignore后生效
+
+```
+git rm -r --cached .    #清除缓存
+git add .               #重新trace file
+git commit -m "update .gitignore" #提交和注释
+git push origin master  #可选，如果需要同步到remote上的话
 ```
 
 ## 如何将Git仓库备份到本地？
@@ -431,6 +566,38 @@ cat id_rsa.pub
 在这个位置配置：
 https://github.com/settings/keys
 
+
+=============具体步骤===========
+
+1、 检查是否已存在相应的ssh key:
+打开终端, 输入:
+```
+ls -al ~/.ssh
+```
+核对列出来的`ssh key`是否有已存在的，假如你没有看到列出的公私钥对，或是不想再用之前的公私钥对，你可以选择下面的步骤生成新的公私钥对.
+
+2、生成新的ssh key,并添加至`ssh-agent`:
+打开终端, 使用ssh key生成命令：
+```
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+注意 ：后面的邮箱对应相应账号的邮箱，假如是github的账号，且注册账号的邮箱为xxxx@qq.com，则命令行为：`ssh-keygen -t rsa -b 4096 -C "xxxx@qq.com`。
+
+3、接下来会提示你保存的ssh key的名称以及路径。默认路径是(/Users/you/.ssh/id_rsa) (you为用户个人目录)。这一步很重要，如果你使用默认的，且下一个账号也是使用默认的路径和文件名，那么之前的ssh key就会被后来生成的ssh key重写，从而导致之前的账号不可用。因此，正确的做法是给它命名，最后以应用名进行命名，因为更容易区分。以下是我个人配的：
+```
+/Users/andy/.ssh/github_rsa
+```
+
+4、接下来会提示设置ssh安全密码。这一步可以使用默认的（即不设置密码），直接按回车即可。倘若想了解更多关于ssh key密码设置的细节，可访问： “Working with SSH key passphrases” 。
+
+5、 ssh key生成后，接下来需要为ssh key添加代理，这是为了让请求自动对应相应的账号。网上很多文章写到需要另外配置config文件，经本人亲测，其实是不需要的，在生成了ssh key后，通过为生成的ssh key添加代理即可，为ssh key添加代理命令：`ssh-add ~/.ssh/xxx_rsa,xxx_rsa`是你生成的ssh key的私钥名。
+
+6、连接测试
+
+接下来我们测试是否配置成功，打开终端，输入:
+```
+ssh -T git@github.com
+```
 
 ## 在GitHub上创建个人仓库
 
@@ -618,11 +785,14 @@ https://github.com/marketplace
 
 ## 怎么快速淘到感兴趣的开源项目
 
+UI界面高级搜索：https://github.com/search/advanced
+
 git 最好 学习 资料
 
 git 最好 学习 资料 in:readme
 
 git 最好 学习 资料 in:readme stars：>1000
+
 
 
 `巧用高级搜索`
@@ -720,3 +890,107 @@ https://github.com/ShenBao/git-notes/projects
 https://github.com/ShenBao/git-notes/settings/branches
 
 pr 需要 rv 之后才可以合并
+
+
+## 团队协作时如何做多分支的集成？
+
+根据实际来操作
+
+```
+git fetch
+
+git rebase origin/master
+
+vi readme
+
+git add .
+
+git rebase --continue
+
+
+git config --global rerere.enabled true
+
+
+```
+
+`以上命令可能前后无关联`
+
+
+## 怎样保证集成的质量？
+
+https://github.com/user-name/xxx-xxx/settings/installations
+
+
+设置保护分支
+
+https://github.com/user-name/xxx-xxx/settings/branches
+
+
+marketplace：https://github.com/marketplace
+
+
+
+## 怎样把产品包发布到GitHub上？
+
+releases
+
+https://github.com/user-name/xxx-xxx/releases
+
+
+配置 .travls.yml 文件
+
+
+
+## 怎么给项目增加详细的指导文档？
+
+Wiki
+
+
+
+## 国内互联网企业为什么喜欢GitLab？
+
+https://about.gitlab.com/
+
+![git12.png](./images/git12.png)
+
+![git13.png](./images/git13.png)
+
+## GitLab有哪些核心的功能？
+
+https://about.gitlab.com/devops-tools
+
+https://about.gitlab.com/stages-devops-lifecycle
+
+
+Pipeline
+
+Docker
+
+
+
+## GitLab上怎么做项目管理？
+
+
+以这个为示例：
+https://gitlab.com/gitlab-org/gitlab-ee
+
+
+## GitLab上怎么做code review？
+
+与github基本类似
+
+https://gitlab.com/gitlab-org/gitlab-ee
+
+
+## GitLab上怎么保证集成的质量？
+
+.gitlab-ci.yml 配置文件
+
+Runners
+
+
+## 怎么把应用部署到AWS上？
+
+
+对前面持续集成等的综合应用
+
