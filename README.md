@@ -20,4 +20,16 @@
 - [Git 笔记](./notes.md)
 
 
+## 图谱
+
+![Git-Cheat-Sheet-by-RebelLabs.png](./images/Git-Cheat-Sheet-by-RebelLabs.png)
+
+![git常用命名.png](./images/git常用命名.png)
+
+![git.png](./images/git.png)
+
+![Git思维导图.jpg](./images/Git思维导图.jpg)
+
+![Git图谱.png](./images/Git图谱.png)
+
 
