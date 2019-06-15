@@ -114,3 +114,14 @@ git branch —merger      //查看那些分支已被并入当前分支
 git branch —no-merger       //查看哪些分支尚未合并的工作
 ```
 
+Git创建空白新分支
+```
+git branch <new_branch>
+git checkout <new_branch>
+git rm --cached -r . 
+git clean -f -d
+
+git commit --allow-empty -m "[empty] initial commit"
+
+git push origin <new_branch>
+```
