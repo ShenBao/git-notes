@@ -31,3 +31,9 @@
 ![Git图谱.png](./images/Git图谱.png)
 
 ![git-commit.png](./images/git-commit.png)
+
+## More links
+
+- [GitHub Home](https://github.com/ShenBao)
+- [Blog Home](https://shenbao.github.io)
+- [About Me](https://shenbao.github.io/about/)
